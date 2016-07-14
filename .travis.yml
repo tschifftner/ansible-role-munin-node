@@ -47,7 +47,10 @@ script:
   # ansible-lint checks for best practice
   - ansible-lint tests/$SITE
 
-  # Make sure motd is installed.
+  # Ensure munin is listening
+  - echo exit | telnet localhost 80 | grep 'Connected to localhost'
+
+  # Make sure munin-node is running.
   - sudo service munin-node status | grep running
 
 after_failure:
@@ -56,6 +59,7 @@ after_failure:
   - ansible --version
   - ansible-lint --version
   - ansible -i 127.0.0.1, -m setup all -c local
+  - echo exit | telnet localhost 80
 
 notifications:
   slack: ambimax:2MlPTX9bY9aPxCPhJGxHKIT6
