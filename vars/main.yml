@@ -1,0 +1,2 @@
+---
+#munin_node_plugins: '{{ (munin_node_hosts_plugins + munin_node_groups_plugins) | unique }}'

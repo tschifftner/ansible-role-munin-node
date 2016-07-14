@@ -1,0 +1,10 @@
+---
+- name: Check if exim is installed
+  register: _munin_node_exim
+  stat:
+    path: '/usr/sbin/exim'
+    follow: yes
+
+- set_fact:
+    munin_node_plugins: '{{ munin_node_plugins + munin_node_plugin_exim }}'
+  when: _munin_node_exim.stat.exists is defined and _munin_node_exim.stat.exists

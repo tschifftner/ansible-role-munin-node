@@ -1,0 +1,61 @@
+---
+- include: fail2ban.yml
+- include: exim.yml
+
+- name: Ensure munin-node is installed
+  apt:
+    pkg: 'munin-node'
+    state: present
+
+- name: Ensure config directories exist
+  file:
+    path: '{{ item }}'
+    state: directory
+  with_items:
+    - /etc/munin/plugin-conf.d
+    - '{{ munin_node_plugin_enabled_dir }}'
+
+- name: Set munin-node configuration
+  notify: restart munin-node
+  template:
+    src: 'munin-node.conf'
+    dest: '/etc/munin/munin-node.conf'
+    owner: root
+    group: root
+    mode: '644'
+
+- name: Set plugin configuration
+  notify: restart munin-node
+  template:
+    src: 'plugin.conf'
+    dest: '/etc/munin/plugin-conf.d/ansible_managed.conf'
+    owner: root
+    group: root
+    mode: '644'
+
+- name: 'Retrieve all installed plugins'
+  shell: ls -1 /etc/munin/plugins
+  register: _munin_node_plugins_enabled
+  changed_when: false
+
+- name: 'Remove shadow plugins'
+  file:
+    path: /etc/munin/plugins{{ item }}
+    state: absent
+  when: item not in (munin_node_plugins | selectattr('name', 'string') | map(attribute='name') | list)
+  with_items: _munin_node_plugins_enabled.stdout_lines
+
+- name: Handle plugins
+  file:
+    path: '{{ munin_node_plugin_enabled_dir }}/{{ item.name }}'
+    src: '{{ munin_node_plugin_dir }}/{{ item.plugin | default( item.name ) }}'
+    state: link
+  when: item.name is defined
+  with_items: munin_node_plugins
+  notify: restart munin-node
+
+- name: Ensure munin-node is running
+  service:
+    name: 'munin-node'
+    state: started
+    enabled: yes

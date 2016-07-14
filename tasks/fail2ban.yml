@@ -1,0 +1,10 @@
+---
+- name: Check if fail2ban is installed
+  register: _munin_node_fail2ban
+  stat:
+    path: '/usr/bin/fail2ban-client'
+    follow: yes
+
+- set_fact:
+    munin_node_plugins: '{{ munin_node_plugins + munin_node_plugin_fail2ban }}'
+  when: _munin_node_fail2ban.stat.exists is defined and _munin_node_fail2ban.stat.exists

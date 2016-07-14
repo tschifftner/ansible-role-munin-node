@@ -1,0 +1,121 @@
+---
+# Using * can lead to ipv6 listening only, therefor use 0.0.0.0
+munin_node_bind_host: '0.0.0.0'
+munin_node_bind_port: '4949'
+
+munin_node_log_level: '4'
+munin_node_log_file: '/var/log/munin/munin-node.log'
+munin_node_pid_file: '/var/run/munin/munin-node.pid'
+munin_node_background: '1'
+munin_node_setsid: '1'
+
+munin_node_user: 'root'
+munin_node_group: 'root'
+
+munin_node_timeout: '900'
+munin_node_plugin_timeout: '60'
+
+munin_node_hostname: '{{ ansible_hostname }}'
+
+# Regexps for files to ignore
+munin_node_ingore_files:
+  - '[\#~]$'
+  - 'DEADJOE$'
+  - '\.bak$'
+  - '%$'
+  - '\.dpkg-(tmp|new|old|dist)$'
+  - '\.rpm(save|new)$'
+  - '\.pod$'
+
+# Define munin hosts that are allowed to access this munin node
+munin_node_default_hosts_allow:
+  - '^127\.0\.0\.1$'
+  - '^::1$'
+
+# Used for hosts
+munin_node_hosts_allow: []
+
+# Used for groups
+munin_node_hosts_allow_combined: '{{ (munin_node_default_hosts_allow + munin_node_hosts_allow) | unique }}'
+
+munin_node_config: []
+
+# Plugins by default
+munin_node_default_plugins:
+  - name: acpi
+#  - name: apc_nis
+  - name: cpu
+  - name: cpuspeed
+  - name: df
+  - name: df_abs
+  - name: df_inode
+  - name: diskstats
+  - name: entropy
+  - name: forks
+  - name: fw_conntrack
+  - name: fw_forwarded_local
+  - name: fw_packets
+  - name: http_loadtime
+  - name: if_err_eth0
+    plugin: if_err_
+  - name: if_eth0
+    plugin: if_
+  - name: interrupts
+  - name: irqstats
+  - name: load
+  - name: meminfo
+  - name: memory
+  - name: munin_stats
+  - name: munin_update
+#  - name: named
+  - name: netstat
+  - name: open_files
+  - name: open_inodes
+  - name: ping_google.com
+    plugin: ping_
+  - name: ping_google.de
+    plugin: ping_
+  - name: processes
+  - name: proc_pri
+  - name: swap
+  - name: threads
+  - name: uptime
+  - name: users
+#  - name: vserver_loadavg
+#  - name: vserver_resources
+  - name: vmstat
+
+# Plugins by host
+munin_node_hosts_plugins: []
+
+# Plugins by group
+munin_node_groups_plugins: []
+#  - name: mysql_bytes
+#  - name: mysql_isam_space_information_schema
+#    plugin: mysql_isam_space_
+#  - name: mysql_isam_space_mysql
+#    plugin: mysql_isam_space_
+#  - name: mysql_isam_space_performance_schema
+#    plugin: mysql_isam_space_
+#  - name: mysql_isam_space_th_live
+#    plugin: mysql_isam_space_
+#  - name: mysql_queries
+#  - name: mysql_slowqueries
+#  - name: mysql_threads
+
+munin_node_additional_plugins: []
+
+munin_node_plugins: '{{ (munin_node_default_plugins + munin_node_groups_plugins + munin_node_hosts_plugins) | unique }}'
+
+# Source and destination of munin plugins
+munin_node_plugin_dir: /usr/share/munin/plugins
+munin_node_plugin_enabled_dir: /etc/munin/plugins
+
+# Some custom modules
+munin_node_plugin_fail2ban:
+  - name: fail2ban
+
+munin_node_plugin_exim:
+  - name: exim_mailqueue
+  - name: exim_mailstats
+
