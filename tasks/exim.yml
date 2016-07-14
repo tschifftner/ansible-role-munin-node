@@ -5,6 +5,7 @@
     path: '/usr/sbin/exim'
     follow: yes
 
-- set_fact:
+- name: 'Set munin_node_plugins fact'
+  set_fact:
     munin_node_plugins: '{{ munin_node_plugins + munin_node_plugin_exim }}'
   when: _munin_node_exim.stat.exists is defined and _munin_node_exim.stat.exists

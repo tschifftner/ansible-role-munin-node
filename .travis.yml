@@ -48,7 +48,7 @@ script:
   - ansible-lint tests/$SITE
 
   # Ensure munin is listening
-  - echo exit | telnet localhost 80 | grep 'Connected to localhost'
+  - echo exit | telnet localhost 4949 | grep 'Connected to localhost'
 
   # Make sure munin-node is running.
   - sudo service munin-node status | grep running
@@ -59,7 +59,7 @@ after_failure:
   - ansible --version
   - ansible-lint --version
   - ansible -i 127.0.0.1, -m setup all -c local
-  - echo exit | telnet localhost 80
+  - echo exit | telnet localhost 4949
 
 notifications:
   slack: ambimax:2MlPTX9bY9aPxCPhJGxHKIT6
