@@ -63,7 +63,7 @@ munin_node_default_plugins:
   - name: interrupts
   - name: irqstats
   - name: load
-  - name: meminfo
+#  - name: meminfo
   - name: memory
   - name: munin_stats
   - name: munin_update
