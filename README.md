@@ -62,7 +62,7 @@ munin_node_config: []
 ## Installation
 
 ```
-$ ansible-galaxy install tschifftner.munin-node
+$ ansible-galaxy install tschifftner.munin_node
 ```
 
 ## Example Playbook
@@ -70,7 +70,7 @@ $ ansible-galaxy install tschifftner.munin-node
     - hosts: server
 
       roles:
-        - { role: tschifftner.munin-node }
+        - { role: tschifftner.munin_node }
 
 ## Supported OS
 

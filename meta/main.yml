@@ -6,7 +6,7 @@ galaxy_info:
   description: Installs munin-node on Debian/Ubuntu linux servers.
   company: ambimax® GmbH
   license: MIT
-  role_name: munin-node
+  role_name: munin_node
   min_ansible_version: 2.5
   platforms:
   - name: Debian

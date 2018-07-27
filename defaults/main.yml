@@ -118,4 +118,3 @@ munin_node_plugin_fail2ban:
 munin_node_plugin_exim:
   - name: exim_mailqueue
   - name: exim_mailstats
-
