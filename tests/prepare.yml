@@ -3,11 +3,29 @@
   remote_user: root
 
   vars:
-    munin_configure_nginx: false
+    munin_configure_nginx: true
     munin_nginx_listen: '8012'
     munin_nginx_server_name: 'localhost'
     munin_admin_user: munin
     munin_admin_password: munin
+    munin_dhparam_size: 32
+
+  pre_tasks:
+    - name: Install test packages
+      apt:
+        pkg: '{{ item }}'
+        cache_valid_time: 86400
+      with_items:
+        - telnet
+        - curl
+        - nginx
+
+    - name: Ensure nginx is started
+      service:
+        name: nginx
+        state: started
+        enabled: yes
+      changed_when: false # fix idempotence
 
   roles:
-    - ansible-role-munin
+    - tschifftner.munin
