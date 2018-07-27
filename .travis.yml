@@ -31,11 +31,13 @@ script:
   - ${DOCKER} munin-node -v | grep munin-node
 
   # Check munin-node service
-  - ${DOCKER} systemctl --no-pager status munin-node | grep 'fpm.service; enabled'
+  - ${DOCKER} systemctl --no-pager status munin-node | grep 'munin-node.service; enabled'
   - ${DOCKER} systemctl --no-pager status munin-node | grep 'running'
 
-  # Ensure munin is listening
-  - ${DOCKER} echo exit | telnet localhost 4949 | grep 'Connected to localhost'
+  # Ensure munin and nginx are listening
+  - ${DOCKER} /etc/ansible/roles/role_under_test/tests/telnet.sh 4949
+  - ${DOCKER} /etc/ansible/roles/role_under_test/tests/telnet.sh 80
+  - ${DOCKER} /etc/ansible/roles/role_under_test/tests/telnet.sh 8012
 
   # Run munin-cron
   - ${DOCKER} /root/.ansible/roles/tschifftner.munin/test/munin-cron.sh
@@ -45,6 +47,7 @@ script:
 after_failure:
   - ${DOCKER} munin-node -v
   - ${DOCKER} systemctl --no-pager status munin
+  - ${DOCKER} systemctl --no-pager status munin-node
   - ${DOCKER} cat /etc/nginx/sites-enabled/munin-node.conf
   - ${DOCKER} curl http://localhost/
   - ${DOCKER} curl http://munin:munin@localhost:8012/
