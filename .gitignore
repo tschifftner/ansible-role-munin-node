@@ -1,0 +1,4 @@
+.DS_STORE
+tests/test.sh
+tests/*.retry
+tests/munin-cron.sh

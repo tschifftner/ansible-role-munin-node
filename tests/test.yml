@@ -8,4 +8,4 @@
     munin_node_hostname: 'localhost'
 
   roles:
-    - ansible-role-munin-node
+    - role_under_test
